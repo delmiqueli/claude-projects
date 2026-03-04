@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Getting Started with Claude Code — Beginner's Guide for Mac</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #faf7f2;
+    --warm-white: #fffef9;
+    --ink: #1a1612;
+    --ink-light: #4a4238;
+    --ink-faint: #8a7d6e;
+    --copper: #c1440e;
+    --copper-light: #e8673a;
+    --copper-pale: #fdf0ea;
+    --sage: #5a7a5e;
+    --sage-pale: #eef4ef;
+    --amber: #d4860a;
+    --amber-pale: #fdf5e0;
+    --border: #e8e0d5;
+    --code-bg: #1e1a16;
+    --code-text: #f0e8d8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--cream); font-family: 'Plus Jakarta Sans', sans-serif; color: var(--ink); line-height: 1.7; }
+  .hero { background: var(--ink); color: var(--cream); padding: 80px 40px 60px; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(193,68,14,0.25) 0%, transparent 60%), radial-gradient(ellipse at 70% 20%, rgba(212,134,10,0.15) 0%, transparent 50%); }
+  .hero-badge { display: inline-block; background: rgba(193,68,14,0.3); border: 1px solid rgba(193,68,14,0.5); color: #f0a070; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px; border-radius: 20px; margin-bottom: 28px; position: relative; }
+  .hero h1 { font-family: 'Lora', serif; font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; line-height: 1.2; margin-bottom: 20px; position: relative; }
+  .hero h1 span { color: #f0935a; }
+  .hero p { font-size: 1.1rem; color: #c8bfb0; max-width: 560px; margin: 0 auto 36px; position: relative; }
+  .hero-meta { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; position: relative; }
+  .hero-meta span { font-family: 'DM Mono', monospace; font-size: 12px; color: #8a7d6e; display: flex; align-items: center; gap: 6px; }
+  .hero-meta span::before { content: '◆'; color: #c1440e; font-size: 8px; }
+  .progress-nav { background: var(--warm-white); border-bottom: 1px solid var(--border); padding: 16px 40px; display: flex; gap: 0; overflow-x: auto; align-items: center; }
+  .progress-step { display: flex; align-items: center; gap: 8px; white-space: nowrap; font-size: 12px; color: var(--ink-faint); font-weight: 500; }
+  .progress-step .num { width: 22px; height: 22px; border-radius: 50%; background: var(--border); color: var(--ink-light); display: flex; align-items: center; justify-content: center; font-size: 11px; font-family: 'DM Mono', monospace; font-weight: 500; flex-shrink: 0; }
+  .p1 .num { background: var(--copper-pale); color: var(--copper); }
+  .p2 .num { background: var(--sage-pale); color: var(--sage); }
+  .p3 .num { background: var(--amber-pale); color: var(--amber); }
+  .progress-divider { width: 32px; height: 1px; background: var(--border); flex-shrink: 0; margin: 0 4px; }
+  .container { max-width: 860px; margin: 0 auto; padding: 60px 24px; }
+  .phase-header { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; margin-top: 72px; padding-bottom: 20px; border-bottom: 2px solid var(--border); }
+  .phase-header:first-of-type { margin-top: 0; }
+  .phase-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+  .ph1 { background: var(--copper-pale); }
+  .ph2 { background: var(--sage-pale); }
+  .ph3 { background: var(--amber-pale); }
+  .phase-label { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+  .pl1 { color: var(--copper); }
+  .pl2 { color: var(--sage); }
+  .pl3 { color: var(--amber); }
+  .phase-title { font-family: 'Lora', serif; font-size: 1.7rem; font-weight: 700; color: var(--ink); }
+  .step { background: var(--warm-white); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 28px; overflow: hidden; }
+  .step-header { padding: 20px 28px; display: flex; align-items: flex-start; gap: 16px; border-bottom: 1px solid var(--border); }
+  .step-num { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+  .sn1 { background: var(--copper-pale); color: var(--copper); }
+  .sn2 { background: var(--sage-pale); color: var(--sage); }
+  .sn3 { background: var(--amber-pale); color: var(--amber); }
+  .step-header h3 { font-family: 'Lora', serif; font-size: 1.2rem; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  .step-header p { font-size: 0.9rem; color: var(--ink-faint); }
+  .step-body { padding: 24px 28px; }
+  .step-body p { font-size: 0.95rem; color: var(--ink-light); margin-bottom: 16px; }
+  .step-body p:last-child { margin-bottom: 0; }
+  .terminal { border-radius: 12px; overflow: hidden; margin: 20px 0; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+  .terminal-bar { background: #2d2520; padding: 12px 16px; display: flex; align-items: center; gap: 8px; }
+  .terminal-title { flex: 1; text-align: center; font-family: 'DM Mono', monospace; font-size: 12px; color: #6b5f52; }
+  .terminal-body { background: var(--code-bg); padding: 24px; font-family: 'DM Mono', monospace; font-size: 13.5px; line-height: 1.9; color: var(--code-text); }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #febc2e; }
+  .dot.g { background: #28c840; }
+  .prompt { color: #c1440e; }
+  .cmd { color: #f0e8d8; }
+  .t-output { color: #8a9e8c; }
+  .t-success { color: #6abf7a; }
+  .cursor { display: inline-block; width: 8px; height: 16px; background: #f0e8d8; animation: blink 1s step-end infinite; vertical-align: middle; margin-left: 2px; }
+  @keyframes blink { 50% { opacity: 0; } }
+  code { font-family: 'DM Mono', monospace; font-size: 0.88em; background: var(--copper-pale); color: var(--copper); padding: 2px 7px; border-radius: 5px; border: 1px solid rgba(193,68,14,0.15); }
+  .callout { border-radius: 10px; padding: 16px 20px; margin: 20px 0; display: flex; gap: 14px; align-items: flex-start; }
+  .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .callout-text { font-size: 0.9rem; color: var(--ink-light); }
+  .callout-text strong { color: var(--ink); display: block; margin-bottom: 3px; }
+  .callout.tip { background: var(--sage-pale); border: 1px solid rgba(90,122,94,0.2); }
+  .callout.warn { background: var(--amber-pale); border: 1px solid rgba(212,134,10,0.2); }
+  .callout.info { background: var(--copper-pale); border: 1px solid rgba(193,68,14,0.2); }
+  .instructions { counter-reset: inst; list-style: none; margin: 16px 0; }
+  .instructions li { counter-increment: inst; display: flex; gap: 14px; margin-bottom: 14px; font-size: 0.93rem; color: var(--ink-light); }
+  .instructions li::before { content: counter(inst); font-family: 'DM Mono', monospace; font-size: 11px; min-width: 24px; height: 24px; background: var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; color: var(--ink-light); }
+  .key { display: inline-flex; align-items: center; background: #fff; border: 1px solid #c8bfb0; border-bottom: 3px solid #c8bfb0; border-radius: 5px; padding: 2px 8px; font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink); }
+  .checkpoint { background: linear-gradient(135deg, #1a1612 0%, #2a2018 100%); border-radius: 16px; padding: 32px; margin: 48px 0; color: var(--cream); border: 1px solid rgba(193,68,14,0.3); position: relative; overflow: hidden; }
+  .checkpoint::before { content: ''; position: absolute; top: -40px; right: -40px; width: 160px; height: 160px; border-radius: 50%; background: radial-gradient(circle, rgba(193,68,14,0.2), transparent 70%); }
+  .checkpoint-label { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #f0935a; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .checkpoint-label::before { content: '✦'; }
+  .checkpoint h3 { font-family: 'Lora', serif; font-size: 1.4rem; margin-bottom: 12px; color: #faf7f2; }
+  .checkpoint p { font-size: 0.93rem; color: #a09080; margin-bottom: 20px; }
+  .checkpoint-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .checkpoint-item { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 16px; font-size: 0.88rem; color: #c8bfb0; display: flex; align-items: center; gap: 10px; }
+  .checkpoint-item::before { content: '○'; color: #c1440e; font-size: 14px; flex-shrink: 0; }
+  .what-is { background: linear-gradient(135deg, var(--ink) 0%, #2a2018 100%); border-radius: 16px; padding: 36px; margin-bottom: 48px; color: var(--cream); border: 1px solid rgba(193,68,14,0.2); }
+  .what-is h2 { font-family: 'Lora', serif; font-size: 1.5rem; margin-bottom: 16px; color: #faf7f2; }
+  .what-is p { font-size: 0.95rem; color: #a09080; margin-bottom: 12px; }
+  .what-is p:last-child { margin-bottom: 0; }
+  .what-is strong { color: #f0935a; }
+  .spotlight-mockup { background: rgba(40,35,30,0.95); border-radius: 14px; overflow: hidden; margin: 20px auto; max-width: 540px; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+  .spotlight-search { display: flex; align-items: center; gap: 14px; padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .spotlight-icon { font-size: 20px; color: #8a7d6e; }
+  .spotlight-input { font-size: 18px; color: #faf7f2; flex: 1; font-family: 'Plus Jakarta Sans', sans-serif; }
+  .spotlight-cursor { display: inline-block; width: 2px; height: 22px; background: #4a90d9; animation: blink 1s step-end infinite; vertical-align: middle; }
+  .spotlight-result { padding: 12px 20px; display: flex; align-items: center; gap: 14px; background: rgba(74,144,217,0.2); }
+  .spotlight-result-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; background: #2a2520; flex-shrink: 0; }
+  .spotlight-result-text { color: #faf7f2; font-size: 15px; font-weight: 500; }
+  .spotlight-result-sub { color: #8a7d6e; font-size: 12px; }
+  .divider { display: flex; align-items: center; gap: 16px; margin: 48px 0; color: var(--ink-faint); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; font-family: 'DM Mono', monospace; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .footer { background: var(--ink); color: #6b5f52; padding: 40px; text-align: center; font-size: 13px; font-family: 'DM Mono', monospace; }
+  .footer a { color: #c1440e; text-decoration: none; }
+  .finder-mockup { background: #f0ece6; border-radius: 12px; overflow: hidden; margin: 20px 0; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+  .finder-toolbar { background: #ddd5c8; padding: 10px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #ccc5b8; }
+  .finder-body { display: flex; min-height: 160px; }
+  .finder-left { width: 160px; background: #e8e0d5; padding: 12px 0; font-size: 12px; color: #6a5e52; flex-shrink: 0; border-right: 1px solid #d5cdc0; }
+  .finder-item { padding: 6px 16px; display: flex; align-items: center; gap: 8px; }
+  .finder-item.active { background: #4a90d9; color: white; border-radius: 6px; margin: 0 8px; padding: 6px 8px; }
+  .finder-right { flex: 1; padding: 20px; background: #faf7f4; }
+  .cc-mockup { background: #f5f0eb; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0,0,0,0.12); margin: 20px 0; }
+  .cc-titlebar { background: #e8e0d5; padding: 12px 16px; display: flex; align-items: center; gap: 8px; }
+  .cc-title { flex: 1; text-align: center; font-size: 13px; font-weight: 600; color: var(--ink-light); }
+  .cc-body { display: flex; min-height: 280px; }
+  .cc-sidebar { width: 200px; background: #f0ece6; border-right: 1px solid var(--border); padding: 16px; flex-shrink: 0; }
+  .cc-main { flex: 1; padding: 24px; display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+  .cc-action { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+  .cc-action-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .cc-action-sub { font-size: 11px; color: var(--ink-faint); }
+  .cc-badge { font-family: 'DM Mono', monospace; font-size: 10px; background: var(--cream); border: 1px solid var(--border); border-radius: 4px; padding: 2px 8px; color: var(--ink-faint); }
+  @media (max-width: 600px) {
+    .hero { padding: 60px 24px 40px; }
+    .container { padding: 40px 16px; }
+    .step-header, .step-body { padding: 16px 20px; }
+    .cc-body, .finder-body { flex-direction: column; }
+    .cc-sidebar, .finder-left { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="hero-badge">Beginner's Guide · Mac Edition · 2026</div>
+  <h1>Getting Started with<br><span>Claude Code</span></h1>
+  <p>A friendly, illustrated step-by-step guide for complete beginners. No coding experience required.</p>
+  <div class="hero-meta">
+    <span>Mac Users</span>
+    <span>~30 minutes</span>
+    <span>No coding needed</span>
+    <span>Free to start</span>
+  </div>
+</div>
+<div class="progress-nav">
+  <div class="progress-step p1"><div class="num">1</div> Install Node.js</div>
+  <div class="progress-divider"></div>
+  <div class="progress-step p1"><div class="num">2</div> Open Terminal</div>
+  <div class="progress-divider"></div>
+  <div class="progress-step p1"><div class="num">3</div> Install Claude Code</div>
+  <div class="progress-divider"></div>
+  <div class="progress-step p2"><div class="num">4</div> Sign In</div>
+  <div class="progress-divider"></div>
+  <div class="progress-step p2"><div class="num">5</div> Open Desktop App</div>
+  <div class="progress-divider"></div>
+  <div class="progress-step p3"><div class="num">6</div> Select a Folder</div>
+  <div class="progress-divider"></div>
+  <div class="progress-step p3"><div class="num">7</div> First Prompt</div>
+</div>
+<div class="container">
+  <!-- WHAT IS IT -->
+  <div class="what-is">
+    <h2>🤖 What is Claude Code?</h2>
+    <p>Claude Code is an AI coding assistant made by Anthropic — the same company behind the Claude chatbot you may have used on claude.ai.</p>
+    <p>Think of it like having a <strong>very smart helper who lives inside your computer</strong>. You type what you want in plain English — "build me a simple website" or "fix this bug" — and Claude does the heavy lifting.</p>
+    <p>Unlike claude.ai (a website), Claude Code runs as a <strong>tool on your Mac</strong>. It can see your files, write code, and make changes — with your permission at every step.</p>
+  </div>
+  <!-- ══════════ PHASE 1 ══════════ -->
+  <div class="phase-header">
+    <div class="phase-icon ph1">🛠️</div>
+    <div>
+      <div class="phase-label pl1">Phase 1 — Setup</div>
+      <div class="phase-title">Installing the Tools</div>
+    </div>
+  </div>
+  <!-- STEP 1 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num sn1">01</div>
+      <div>
+        <h3>Download &amp; Install Node.js</h3>
+        <p>Claude Code needs a helper program called Node.js to run on your Mac.</p>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Node.js is free software that lets programs like Claude Code run on your computer. Think of it as a required "ingredient" — once installed, you never need to touch it again.</p>
+      <ol class="instructions">
+        <li>Open any web browser (Safari, Chrome, or Firefox) on your Mac.</li>
+        <li>Go to <strong>nodejs.org</strong> — type this in your address bar and press <span class="key">Return</span>.</li>
+        <li>Click the green button labeled <strong>"LTS"</strong> (Long Term Support — this is the most stable version).</li>
+        <li>A file downloads to your Downloads folder. Double-click it to open the installer.</li>
+        <li>Click through: Continue → Continue → Install. Enter your Mac password if asked.</li>
+        <li>When you see "The installation was successful" — click Close. Done! ✅</li>
+      </ol>
+      <div class="finder-mockup">
+        <div class="finder-toolbar">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+          <div style="flex:1;text-align:center;font-size:12px;color:#7a6e62;font-family:'DM Mono',monospace;">Downloads</div>
+        </div>
+        <div class="finder-body">
+          <div class="finder-left">
+            <div class="finder-item">⭐ Favorites</div>
+            <div class="finder-item active">📥 Downloads</div>
+            <div class="finder-item">🖥️ Desktop</div>
+            <div class="finder-item">📄 Documents</div>
+          </div>
+          <div class="finder-right">
+            <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:8px;width:72px;text-align:center;">
+                <div style="width:56px;height:56px;border-radius:10px;background:#4a7fc1;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 2px 8px rgba(0,0,0,0.15);">📦</div>
+                <span style="font-size:11px;color:var(--ink-light);">node-v22.pkg</span>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;gap:8px;width:72px;text-align:center;">
+                <div style="width:56px;height:56px;border-radius:10px;background:#e8e0d5;display:flex;align-items:center;justify-content:center;font-size:28px;">🗂️</div>
+                <span style="font-size:11px;color:var(--ink-light);">Other Files</span>
+              </div>
+            </div>
+            <div style="margin-top:16px;font-size:12px;color:#8a7d6e;font-family:'DM Mono',monospace;">← Double-click the node .pkg file to install</div>
+          </div>
+        </div>
+      </div>
+      <div class="callout tip">
+        <div class="callout-icon">💡</div>
+        <div class="callout-text">
+          <strong>Don't worry about what Node.js is</strong>
+          You don't need to understand it — just install it like any other Mac app. After this step, you'll never need to open or touch it directly.
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- STEP 2 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num sn1">02</div>
+      <div>
+        <h3>Open the Terminal App</h3>
+        <p>Terminal is a text-based window that comes pre-installed on every Mac.</p>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Terminal lets you give your computer instructions by typing commands. It looks simple and plain — and that's okay! You only need to follow exactly what this guide shows you.</p>
+      <ol class="instructions">
+        <li>Press <span class="key">⌘ Command</span> + <span class="key">Space</span> at the same time. A search bar appears in the center of your screen — that's Spotlight.</li>
+        <li>Type <strong>Terminal</strong> and press <span class="key">Return</span>.</li>
+        <li>A window opens — mostly white or black with a blinking cursor. That's Terminal. You're in!</li>
+      </ol>
+      <div class="spotlight-mockup">
+        <div class="spotlight-search">
+          <div class="spotlight-icon">🔍</div>
+          <div class="spotlight-input">Terminal<span class="spotlight-cursor"></span></div>
+        </div>
+        <div class="spotlight-result">
+          <div class="spotlight-result-icon">⬛</div>
+          <div>
+            <div class="spotlight-result-text">Terminal</div>
+            <div class="spotlight-result-sub">Application · Utilities</div>
+          </div>
+        </div>
+      </div>
+      <div class="callout warn">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-text">
+          <strong>Terminal can look intimidating — that's normal!</strong>
+          You only need to type exactly what this guide shows, then press Return. Take it one step at a time and you'll be fine.
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- STEP 3 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num sn1">03</div>
+      <div>
+        <h3>Install Claude Code</h3>
+        <p>One command is all it takes — Claude Code installs itself automatically.</p>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Click inside the Terminal window to make sure it's active. Then carefully type (or copy and paste) the command below, and press <span class="key">Return</span>:</p>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+          <div class="terminal-title">Terminal — zsh</div>
+        </div>
+        <div class="terminal-body">
+          <span class="prompt">~ $</span> <span class="cmd">npm install -g @anthropic-ai/claude-code</span><br><br>
+          <span class="t-output">added 47 packages in 12s</span><br>
+          <span class="t-success">✓ claude-code installed successfully</span><br>
+          <span class="t-output">Run 'claude' to get started</span><br><br>
+          <span class="prompt">~ $</span> <span class="cursor"></span>
+        </div>
+      </div>
+      <p>Text will scroll by while it installs (30–90 seconds). You'll know it's done when the scrolling stops and your prompt (<code>~ $</code>) reappears.</p>
+      <div class="callout info">
+        <div class="callout-icon">📋</div>
+        <div class="callout-text">
+          <strong>Copy-paste tip</strong>
+          To paste into Terminal: <span class="key">⌘ Command</span> + <span class="key">V</span> — same as anywhere on your Mac.
+        </div>
+      </div>
+      <div class="callout warn">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-text">
+          <strong>If you see "permission denied"</strong>
+          Type <code>sudo npm install -g @anthropic-ai/claude-code</code> instead, press Return, then type your Mac password (it won't show as you type — that's normal).
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- CHECKPOINT 1 -->
+  <div class="checkpoint">
+    <div class="checkpoint-label">Checkpoint — After Steps 1–3</div>
+    <h3>🎉 Let's verify everything is working</h3>
+    <p>In Terminal, type <code>claude --version</code> and press Return. You should see a version number (like <code>1.x.x</code>). If you do — fantastic, keep going! If not, try Step 3 again, or check that Node.js installed correctly in Step 1.</p>
+    <div class="checkpoint-items">
+      <div class="checkpoint-item">Node.js installed without errors</div>
+      <div class="checkpoint-item">Terminal opened successfully</div>
+      <div class="checkpoint-item"><code style="color:#f0935a;background:rgba(240,147,90,0.1);border:none;">claude --version</code> shows a number</div>
+    </div>
+  </div>
+  <!-- ══════════ PHASE 2 ══════════ -->
+  <div class="phase-header">
+    <div class="phase-icon ph2">🔑</div>
+    <div>
+      <div class="phase-label pl2">Phase 2 — Connect</div>
+      <div class="phase-title">Signing In &amp; Opening Claude Code</div>
+    </div>
+  </div>
+  <!-- STEP 4 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num sn2">04</div>
+      <div>
+        <h3>Launch Claude Code &amp; Sign In</h3>
+        <p>Connect Claude Code to your Anthropic account to activate it.</p>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Claude Code needs to connect to Anthropic's servers. You'll sign in just like you do on claude.ai. Here are the two ways to access it:</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;">
+        <div style="background:var(--sage-pale);border:1px solid rgba(90,122,94,0.25);border-radius:10px;padding:16px;">
+          <div style="font-weight:600;color:var(--sage);margin-bottom:8px;font-size:0.9rem;">✅ Claude Pro or Max Plan</div>
+          <div style="font-size:0.85rem;color:var(--ink-light);">If you pay for Claude Pro or Max on claude.ai, Claude Code is already included. Sign in with the same account.</div>
+        </div>
+        <div style="background:var(--amber-pale);border:1px solid rgba(212,134,10,0.25);border-radius:10px;padding:16px;">
+          <div style="font-weight:600;color:var(--amber);margin-bottom:8px;font-size:0.9rem;">🔑 API Key (Pay as you go)</div>
+          <div style="font-size:0.85rem;color:var(--ink-light);">Use your Anthropic API key from console.anthropic.com. You'll be billed based on usage.</div>
+        </div>
+      </div>
+      <p>In Terminal, type the following and press <span class="key">Return</span>:</p>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+          <div class="terminal-title">Terminal — zsh</div>
+        </div>
+        <div class="terminal-body">
+          <span class="prompt">~ $</span> <span class="cmd">claude</span><br><br>
+          <span class="t-output">Welcome to Claude Code!</span><br>
+          <span class="t-output">Opening your browser to sign in...</span><br>
+        </div>
+      </div>
+      <ol class="instructions">
+        <li>Type <code>claude</code> and press <span class="key">Return</span>.</li>
+        <li>Your web browser opens with a login page — sign in with your Anthropic account.</li>
+        <li>Click <strong>"Authorize"</strong> when prompted.</li>
+        <li>Your browser may show "You can return to Claude Code." Switch back to Terminal.</li>
+        <li>Claude Code is now ready and waiting for your first message! 🎉</li>
+      </ol>
+      <div class="callout tip">
+        <div class="callout-icon">💡</div>
+        <div class="callout-text">
+          <strong>Don't have an account yet?</strong>
+          Go to <strong>claude.ai</strong> and sign up first. Claude Code requires at least a Claude Pro subscription to use.
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- STEP 5 (new) -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num sn2">05</div>
+      <div>
+        <h3>Open the Claude Code Desktop App</h3>
+        <p>After installing, Claude Code gives you a proper Mac app — no Terminal needed from here on.</p>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>The installation you did in Phase 1 also installed the <strong>Claude Code desktop app</strong>. This is a clean, visual interface — much friendlier than Terminal — and it's the recommended way for beginners to use Claude Code day-to-day.</p>
+      <ol class="instructions">
+        <li>Press <span class="key">⌘ Command</span> + <span class="key">Space</span> to open Spotlight Search.</li>
+        <li>Type <strong>Claude Code</strong> and press <span class="key">Return</span>.</li>
+        <li>The app opens. You'll see three tabs at the top: <strong>Chat</strong>, <strong>Cowork</strong>, and <strong>Code</strong>. Click <strong>Code</strong> — that's the main coding interface.</li>
+        <li>Sign in with your Anthropic account if prompted (same login as claude.ai).</li>
+      </ol>
+      <!-- Desktop app mockup based on user's screenshot -->
+      <div style="background:#f2ede8;border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:0 8px 32px rgba(0,0,0,0.12);margin:20px 0;">
+        <!-- Title bar -->
+        <div style="background:#e8e2dc;padding:12px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #d8d0c8;">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+          <!-- Tab bar -->
+          <div style="flex:1;display:flex;justify-content:center;gap:4px;">
+            <div style="padding:5px 18px;border-radius:20px;font-size:13px;color:var(--ink-faint);">Chat</div>
+            <div style="padding:5px 18px;border-radius:20px;font-size:13px;color:var(--ink-faint);">Cowork</div>
+            <div style="padding:5px 18px;border-radius:20px;font-size:13px;font-weight:600;color:var(--ink);background:white;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,0.08);">Code</div>
+          </div>
+        </div>
+        <!-- App body -->
+        <div style="padding:48px 40px;display:flex;flex-direction:column;align-items:center;gap:28px;background:#f5f0ea;">
+          <!-- Pixel mascot -->
+          <div style="display:grid;grid-template-columns:repeat(8,10px);grid-template-rows:repeat(8,10px);gap:1px;">
+            <!-- Row 1 -->
+            <div></div><div></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div></div><div></div>
+            <!-- Row 2 -->
+            <div></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div></div>
+            <!-- Row 3 eyes -->
+            <div></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#1a1612;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#1a1612;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div></div>
+            <!-- Row 4 -->
+            <div></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div></div>
+            <!-- Row 5 body -->
+            <div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div>
+            <!-- Row 6 -->
+            <div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div>
+            <!-- Row 7 legs -->
+            <div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div><div></div><div></div><div></div><div></div><div style="background:#c85a2a;border-radius:1px;"></div><div style="background:#c85a2a;border-radius:1px;"></div>
+          </div>
+          <!-- Input area -->
+          <div style="width:100%;max-width:580px;">
+            <div style="background:white;border-radius:12px;border:1px solid var(--border);padding:16px 20px;font-size:14px;color:var(--ink-faint);margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06);">Find a small todo in the codebase and do it</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0 4px;margin-bottom:12px;">
+              <div style="display:flex;align-items:center;gap:16px;">
+                <span style="font-size:12px;color:var(--ink-faint);">+ &nbsp;&lt;/&gt; Auto accept edits ∨</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <span style="font-size:12px;color:var(--ink-faint);">Sonnet 4.6 ∨</span>
+                <div style="width:30px;height:30px;background:var(--copper);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;">↑</div>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;padding:0 4px;margin-bottom:20px;">
+              <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:12px;color:var(--ink-light);display:flex;align-items:center;gap:6px;"><span>□</span> Select folder</div>
+              <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-size:12px;color:var(--ink-light);">🖥️ Local ∨</div>
+            </div>
+            <!-- Quick action cards -->
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+              <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:14px;font-size:11px;color:var(--ink-light);">
+                <div style="margin-bottom:6px;">Create or update my <span style="font-family:'DM Mono',monospace;background:var(--copper-pale);color:var(--copper);padding:1px 4px;border-radius:3px;font-size:10px;">CLAUDE.MD</span> file</div>
+              </div>
+              <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:14px;font-size:11px;color:var(--ink-light);">
+                <div style="margin-bottom:6px;">Search for a <span style="font-family:'DM Mono',monospace;background:var(--amber-pale);color:var(--amber);padding:1px 4px;border-radius:3px;font-size:10px;">TODO</span> comment and fix it</div>
+              </div>
+              <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:14px;font-size:11px;color:var(--ink-light);">
+                <div style="margin-bottom:6px;">Recommend areas to improve our <span style="font-family:'DM Mono',monospace;background:var(--sage-pale);color:var(--sage);padding:1px 4px;border-radius:3px;font-size:10px;">tests</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="callout tip">
+        <div class="callout-icon">💡</div>
+        <div class="callout-text">
+          <strong>What are Chat, Cowork, and Code?</strong>
+          <strong>Chat</strong> is a regular conversation with Claude (like claude.ai). <strong>Code</strong> is the full coding assistant that can read and edit your files. <strong>Cowork</strong> lets Claude help with desktop tasks. For coding projects, always use <strong>Code</strong>.
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- CHECKPOINT 2 -->
+  <div class="checkpoint">
+    <div class="checkpoint-label">Checkpoint — After Steps 4–5</div>
+    <h3>🖥️ The desktop app is open and you're signed in</h3>
+    <p>You should see the Claude Code app with the <strong>Code</strong> tab selected, showing a text box with the pixel mascot above it. If you see those quick-action cards at the bottom ("Create or update my CLAUDE.MD…") — you're in the right place!</p>
+    <div class="checkpoint-items">
+      <div class="checkpoint-item">Desktop app opened</div>
+      <div class="checkpoint-item">Signed in with your account</div>
+      <div class="checkpoint-item">"Code" tab is selected</div>
+    </div>
+  </div>
+  <!-- ══════════ PHASE 3 ══════════ -->
+  <div class="phase-header">
+    <div class="phase-icon ph3">✨</div>
+    <div>
+      <div class="phase-label pl3">Phase 3 — Use It!</div>
+      <div class="phase-title">Talking to Claude Code</div>
+    </div>
+  </div>
+  <!-- STEP 6 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num sn3">06</div>
+      <div>
+        <h3>Select Your Project Folder</h3>
+        <p>Use the "Select folder" button to point Claude at the folder you want to work in — no Terminal needed.</p>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Before you can ask Claude to do anything, it needs to know <em>where</em> your project lives on your Mac. The desktop app makes this easy with a simple folder picker.</p>
+      <ol class="instructions">
+        <li>In the Claude Code app, look for the <strong>"Select folder"</strong> button near the bottom-left of the input area.</li>
+        <li>Click it. A standard Mac file browser opens.</li>
+        <li>Navigate to your project folder — or your Desktop — and click <strong>Open</strong>.</li>
+        <li>The button updates to show your folder name, confirming Claude is now looking at those files.</li>
+      </ol>
+      <!-- Folder picker mockup -->
+      <div style="background:#f2ede8;border-radius:14px;overflow:hidden;border:1px solid var(--border);box-shadow:0 6px 24px rgba(0,0,0,0.1);margin:20px 0;">
+        <div style="background:#e8e2dc;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #d8d0c8;">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+          <div style="flex:1;text-align:center;font-size:12px;color:#7a6e62;font-family:'DM Mono',monospace;">Claude Code</div>
+        </div>
+        <div style="padding:24px;display:flex;flex-direction:column;align-items:center;gap:16px;background:#f5f0ea;">
+          <div style="width:100%;max-width:500px;background:white;border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:14px;color:var(--ink-faint);">Ask Claude to write code...</div>
+          <div style="width:100%;max-width:500px;display:flex;justify-content:space-between;align-items:center;">
+            <!-- Highlighted select folder button -->
+            <div style="background:white;border:2px solid var(--copper);border-radius:8px;padding:9px 16px;font-size:13px;color:var(--copper);font-weight:600;display:flex;align-items:center;gap:8px;box-shadow:0 0 0 4px rgba(193,68,14,0.1);">
+              <span>□</span> Select folder
+              <span style="font-size:11px;background:var(--copper);color:white;border-radius:4px;padding:2px 6px;margin-left:4px;">← Click here</span>
+            </div>
+            <div style="background:white;border:1px solid var(--border);border-radius:8px;padding:9px 16px;font-size:13px;color:var(--ink-light);">🖥️ Local ∨</div>
+          </div>
+          <!-- After selection state -->
+          <div style="width:100%;max-width:500px;background:var(--sage-pale);border:1px solid rgba(90,122,94,0.3);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:20px;">✅</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--sage);">Folder selected: my-project</div>
+              <div style="font-size:11px;color:var(--ink-faint);">Claude can now read and edit files in this folder</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="callout tip">
+        <div class="callout-icon">💡</div>
+        <div class="callout-text">
+          <strong>Starting from scratch?</strong>
+          First create an empty folder on your Desktop (just right-click on your Desktop → New Folder, and give it a name). Then select that new folder in Claude Code. Claude will build your project inside it.
+        </div>
+      </div>
+      <div class="callout info">
+        <div class="callout-icon">🖥️</div>
+        <div class="callout-text">
+          <strong>What does "Local" mean?</strong>
+          The "Local" button in the bottom-right of the input area means Claude Code is running on your own Mac. You can leave this as-is — it's the right setting for most people.
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- STEP 7 -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num sn3">07</div>
+      <div>
+        <h3>Type Your First Prompt &amp; Review the Results</h3>
+        <p>Ask Claude anything in plain English, then review, approve, and keep refining.</p>
+      </div>
+    </div>
+    <div class="step-body">
+      <p>Now the real magic happens. Click inside the text box, type what you want, and press the orange send button (↑) or hit <span class="key">Return</span>. Claude Code understands plain English — no coding knowledge needed.</p>
+      <p><strong>Great first prompts to try:</strong></p>
+      <div style="display:grid;gap:12px;margin:16px 0 24px;">
+        <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;gap:14px;align-items:flex-start;">
+          <div style="font-size:22px;flex-shrink:0;">🌐</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--ink);margin-bottom:6px;">Build a simple webpage:</div>
+            <code style="background:var(--amber-pale);color:var(--amber);border-color:rgba(212,134,10,0.2);font-size:0.88rem;">Create a simple HTML webpage with a blue background, white text that says Hello World, and a friendly font</code>
+          </div>
+        </div>
+        <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;gap:14px;align-items:flex-start;">
+          <div style="font-size:22px;flex-shrink:0;">📁</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--ink);margin-bottom:6px;">Understand your project:</div>
+            <code style="background:var(--amber-pale);color:var(--amber);border-color:rgba(212,134,10,0.2);font-size:0.88rem;">Explain what files are in this project and what each one does, in simple terms</code>
+          </div>
+        </div>
+        <div style="background:white;border:1px solid var(--border);border-radius:10px;padding:16px;display:flex;gap:14px;align-items:flex-start;">
+          <div style="font-size:22px;flex-shrink:0;">🐛</div>
+          <div>
+            <div style="font-size:0.88rem;font-weight:600;color:var(--ink);margin-bottom:6px;">Fix a problem:</div>
+            <code style="background:var(--amber-pale);color:var(--amber);border-color:rgba(212,134,10,0.2);font-size:0.88rem;">Something isn't working right. Can you look at the files and find what's broken?</code>
+          </div>
+        </div>
+      </div>
+      <!-- What happens after a prompt mockup -->
+      <div style="background:#f2ede8;border-radius:14px;overflow:hidden;border:1px solid var(--border);box-shadow:0 6px 24px rgba(0,0,0,0.1);margin:20px 0;">
+        <div style="background:#e8e2dc;padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #d8d0c8;">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+          <div style="flex:1;text-align:center;font-size:12px;color:#7a6e62;font-family:'DM Mono',monospace;">Claude Code — my-project</div>
+        </div>
+        <div style="background:#f5f0ea;padding:24px;display:flex;flex-direction:column;gap:14px;">
+          <!-- User message bubble -->
+          <div style="display:flex;justify-content:flex-end;">
+            <div style="background:var(--ink);color:var(--cream);border-radius:12px 12px 4px 12px;padding:12px 16px;font-size:13px;max-width:80%;">Create a simple HTML webpage with a blue background and Hello World text</div>
+          </div>
+          <!-- Claude response -->
+          <div style="background:white;border:1px solid var(--border);border-radius:4px 12px 12px 12px;padding:16px;font-size:13px;color:var(--ink-light);">
+            <div style="font-weight:600;color:var(--ink);margin-bottom:10px;">I'll create an <code>index.html</code> file for you right away!</div>
+            <!-- File change preview -->
+            <div style="background:#f5f0ea;border-radius:8px;padding:12px;font-family:'DM Mono',monospace;font-size:11px;color:var(--ink-light);margin-bottom:12px;border:1px solid var(--border);">
+              <div style="color:var(--sage);margin-bottom:4px;">+ index.html (new file)</div>
+              <div style="color:#8a9e8c;">+ &lt;!DOCTYPE html&gt;</div>
+              <div style="color:#8a9e8c;">+ &lt;body style="background:blue;color:white"&gt;</div>
+              <div style="color:#8a9e8c;">+ &nbsp;&nbsp;&lt;h1&gt;Hello World&lt;/h1&gt;</div>
+              <div style="color:#8a9e8c;">+ &lt;/body&gt;</div>
+            </div>
+            <!-- Approve buttons -->
+            <div style="display:flex;gap:10px;align-items:center;">
+              <div style="background:var(--sage);color:white;border-radius:7px;padding:8px 18px;font-size:12px;font-weight:600;">✓ Approve</div>
+              <div style="background:white;border:1px solid var(--border);color:var(--ink-light);border-radius:7px;padding:8px 18px;font-size:12px;">✗ Reject</div>
+              <span style="font-size:12px;color:var(--ink-faint);">← You're always in control</span>
+            </div>
+          </div>
+        </div>
+      </div>
+            <p>Claude shows you exactly what it wants to do — and waits for your go-ahead before touching any files. Click <strong>Approve</strong> to let it proceed, or <strong>Reject</strong> to say no. You can also keep chatting to refine the result.</p>
+      <ol class="instructions">
+        <li>After approving, open your project folder in Finder — new files will appear there immediately.</li>
+        <li>For HTML files: double-click to open in Safari and preview your webpage!</li>
+        <li>Want changes? Type follow-up instructions like <em>"Change the background to dark green"</em> or <em>"Make the text bigger."</em></li>
+        <li>Claude proposes each change and waits for your approval. Keep going until you're happy!</li>
+      </ol>
+      <div class="callout tip">
+        <div class="callout-icon">&#x1F5A5;&#xFE0F;</div>
+        <div class="callout-text">
+          <strong>When Claude asks "Which dev server would you like to start?"</strong>
+          Always choose <strong>option 1 &mdash; "Python Static Server"</strong> (it says "built-in, no install needed"). The Preview panel on the right will then show your live webpage. <strong>Avoid option 2 (npx serve)</strong> for now &mdash; it can trigger a permissions error (a wall of red text starting with <code>npm error EACCES</code>). If that happens, your HTML file was still created &mdash; just find it in Finder and double-click to open in Safari.
+        </div>
+      </div>
+      <div class="callout warn">
+        <div class="callout-icon">&#x1F527;</div>
+        <div class="callout-text">
+          <strong>Fixing the "npm error EACCES" permissions error</strong>
+          If Claude tells you to run a <code>sudo chown</code> command: open Terminal (<span class="key">&#x2318;</span> + <span class="key">Space</span>, type Terminal, press Return), paste the command Claude gives you &mdash; it looks like <code>sudo chown -R 502:20 "/Users/yourname/.npm"</code>. Press Return, type your Mac password when asked (it won't show as you type &mdash; that's normal), then go back to Claude Code and type "done." Claude will restart the server. This is a one-time fix.
+        </div>
+      </div>
+      <div class="callout tip">
+        <div class="callout-icon">&#x1F4A1;</div>
+        <div class="callout-text">
+          <strong>The more specific, the better</strong>
+          Instead of "make a website," try: "Make a website for my bakery called Sunny Loaves with a menu section showing croissants, muffins, and sourdough. Use warm golden colors and a clean, modern look."
+        </div>
+      </div>
+      <div class="callout tip">
+        <div class="callout-icon">&#x1F504;</div>
+        <div class="callout-text">
+          <strong>Leave "Auto accept edits" off while learning</strong>
+          When on, Claude makes changes without asking each time. Leave it <strong>off</strong> while you're getting started so you can review every change before it happens.
+        </div>
+      </div>
+      <div class="callout info">
+        <div class="callout-icon">&#x1F4DD;</div>
+        <div class="callout-text">
+          <strong>What are the quick-action cards?</strong>
+          The suggestion cards on the home screen ("Create or update my CLAUDE.MD file", "Search for a TODO comment&hellip;") are clickable shortcuts. The CLAUDE.MD one is especially useful &mdash; it creates a memory file so Claude remembers your project details between sessions.
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- FINAL CHECKPOINT -->
+  <div class="checkpoint">
+    <div class="checkpoint-label">&#x1F393; You Did It!</div>
+    <h3>You're officially a Claude Code user</h3>
+    <p>You've installed Node.js, set up Claude Code, opened the desktop app, pointed it at a project, and sent your first prompt. That's a genuinely impressive first session!</p>
+    <div class="checkpoint-items">
+      <div class="checkpoint-item">Node.js installed on Mac</div>
+      <div class="checkpoint-item">Claude Code installed</div>
+      <div class="checkpoint-item">Desktop app opened</div>
+      <div class="checkpoint-item">Signed in with your account</div>
+      <div class="checkpoint-item">Project folder selected</div>
+      <div class="checkpoint-item">First prompt sent &amp; approved</div>
+    </div>
+  </div>
+  </div>
+  <!-- NEXT STEPS -->
+  <div class="divider">What to try next</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:24px;">
+    <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:24px;">
+      <div style="font-size:32px;margin-bottom:12px;">🏗️</div>
+      <div style="font-weight:700;font-family:'Lora',serif;font-size:1rem;margin-bottom:8px;">Build something real</div>
+      <div style="font-size:0.88rem;color:var(--ink-faint);">Ask Claude to build a portfolio site, to-do list, resume page, or anything you can imagine.</div>
+    </div>
+    <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:24px;">
+      <div style="font-size:32px;margin-bottom:12px;">🔗</div>
+      <div style="font-weight:700;font-family:'Lora',serif;font-size:1rem;margin-bottom:8px;">Connect to GitHub</div>
+      <div style="font-size:0.88rem;color:var(--ink-faint);">Back up and share your code online. Claude Code has built-in GitHub support.</div>
+    </div>
+    <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:24px;">
+      <div style="font-size:32px;margin-bottom:12px;">📖</div>
+      <div style="font-weight:700;font-family:'Lora',serif;font-size:1rem;margin-bottom:8px;">Read the official docs</div>
+      <div style="font-size:0.88rem;color:var(--ink-faint);">Visit <strong>docs.anthropic.com</strong> and search "Claude Code" for shortcuts, tips, and advanced features.</div>
+    </div>
+  </div>
+  <!-- QUICK REFERENCE -->
+  <div class="divider" style="margin-top:56px;">Desktop app — what everything does</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:24px;">
+    <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:20px;">
+      <div style="font-family:'DM Mono',monospace;font-size:11px;background:var(--cream);border:1px solid var(--border);border-radius:6px;padding:4px 10px;display:inline-block;margin-bottom:10px;color:var(--ink-light);">Chat · Cowork · Code tabs</div>
+      <div style="font-size:0.88rem;color:var(--ink-faint);">Switch between modes. Always pick <strong>Code</strong> for coding projects. <strong>Chat</strong> is for general questions without file access.</div>
+    </div>
+    <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:20px;">
+      <div style="font-family:'DM Mono',monospace;font-size:11px;background:var(--cream);border:1px solid var(--border);border-radius:6px;padding:4px 10px;display:inline-block;margin-bottom:10px;color:var(--ink-light);">Select folder</div>
+      <div style="font-size:0.88rem;color:var(--ink-faint);">Points Claude at the folder on your Mac you want to work in. Must be set before asking Claude to create or edit files.</div>
+    </div>
+    <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:20px;">
+      <div style="font-family:'DM Mono',monospace;font-size:11px;background:var(--cream);border:1px solid var(--border);border-radius:6px;padding:4px 10px;display:inline-block;margin-bottom:10px;color:var(--ink-light);">Auto accept edits</div>
+      <div style="font-size:0.88rem;color:var(--ink-faint);">When ON, Claude makes changes without asking. Leave <strong>OFF</strong> while learning so you can review each change.</div>
+    </div>
+    <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:20px;">
+      <div style="font-family:'DM Mono',monospace;font-size:11px;background:var(--cream);border:1px solid var(--border);border-radius:6px;padding:4px 10px;display:inline-block;margin-bottom:10px;color:var(--ink-light);">Sonnet 4.6 ∨</div>
+      <div style="font-size:0.88rem;color:var(--ink-faint);">The AI model being used. Sonnet 4.6 is the default and great for most tasks — no need to change this.</div>
+    </div>
+    <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:20px;">
+      <div style="font-family:'DM Mono',monospace;font-size:11px;background:var(--cream);border:1px solid var(--border);border-radius:6px;padding:4px 10px;display:inline-block;margin-bottom:10px;color:var(--ink-light);">Quick-action cards</div>
+      <div style="font-size:0.88rem;color:var(--ink-faint);">Clickable shortcuts on the home screen. "Create CLAUDE.MD" is the most useful one to try first.</div>
+    </div>
+    <div style="background:var(--warm-white);border:1px solid var(--border);border-radius:14px;padding:20px;">
+      <div style="font-family:'DM Mono',monospace;font-size:11px;background:var(--cream);border:1px solid var(--border);border-radius:6px;padding:4px 10px;display:inline-block;margin-bottom:10px;color:var(--ink-light);">Approve / Reject</div>
+      <div style="font-size:0.88rem;color:var(--ink-faint);">Claude always shows what it wants to do before doing it. Approve lets it proceed; Reject cancels the change.</div>
+    </div>
+  </div>
+</div><!-- end container -->
+<div class="footer">
+  <div style="margin-bottom:8px;color:#a09080;">Made for Mac beginners · Claude Code by Anthropic</div>
+  <div>Official docs: <a href="https://docs.anthropic.com">docs.anthropic.com</a> &nbsp;·&nbsp; Support: <a href="https://support.claude.com">support.claude.com</a></div>
+</div>
+</body>
+</html>
